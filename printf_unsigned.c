@@ -1,43 +1,77 @@
-#include "main.h"
-
+#include"main.h"
 /**
- * printf_unsigned - prints a binary number
- * @num: number of arguements
- * @printed: the printed characters
- * Return: printed charcaters
+ * is_printable - evaluates if char is printable
+ * @c: char
+ * Return: 1 if c is printable, 0 otherwise
  */
-
-int printf_unsigned(unsigned int num, int printed)
+int is_printable(char c)
 {
-	int digits = 0;
-	unsigned int temp = num;
+	if (c >= 32 && c < 127)
+		return (1);
 
-	do {
-		digits++;
-		temp /= 10;
-	} while (temp != 0);
+	return (0);
+}
+/**
+ * append_hexa_code - append ascii in hexa code to buffer
+ * @buffer: array of chars
+ * @i: index to start appending
+ * @ascii_code: as stated
+ * Return: always 3
+ */
+int append_hexa_code(char ascii_code, char buffer[], int i)
+{
+	char map_to[] = "0123456789ABCDEF";
+	/*The hexa format code is always 2digits long*/
+	if (ascii_code < 0)
+		ascii_code *= -1;
 
-	if (num == 0)
-	{
-		_putchar('0');
-		printed++;
-	}
-	else
-	{
-		char unsigned_str[11];
-		int i = 0;
+	buffer[i++] = '\\';
+	buffer[i++] = 'x';
 
-		while (num != 0)
-		{
-			unsigned_str[i] = (num % 10) + '0';
-			num /= 10;
-			i++;
-		}
-		for (i = digits - 1; i >= 0; i--)
-		{
-			_putchar(unsigned_str[i]);
-			printed++;
-		}
-	}
-	return (printed);
+	buffer[i++] = map_to[ascii_code / 16];
+	buffer[i] = map_to[ascii_code % 16];
+
+	return (3);
+}
+/**
+ * is_digit - verifies if a char is a digit
+ * @c: char
+ * Return: 1 if digit, 0 otherwise
+ */
+int is_digit(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+
+	return (0);
+}
+/**
+ * convert_size_number - casts a number to the specified size
+ * @num: number to be caste
+ * @size: size to be casted
+ * Return: casted value of num
+ */
+long int convert_size_number(long int num, int size)
+{
+	if (size == S_LONG)
+		return (num);
+	else if (size == S_SHORT)
+		return ((short)num);
+
+	return ((int)num);
+}
+/**
+ * convert_size_unsgnd - casts a num to the specified size
+ * @num: number to be casted
+ * @size: size to be casted
+ * Return: casted value of num
+ */
+long int convert_size_unsgnd(unsigned long int num, int size)
+{
+	if (size == S_LONG)
+		return (num);
+	else if (size == S_SHORT)
+		return ((unsigned short)num);
+
+	return ((unsigned int)num);
 }

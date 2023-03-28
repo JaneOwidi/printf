@@ -1,27 +1,36 @@
 #include "main.h"
 
 /**
- * printf_reverse - prints a binary number
- * @args: number of arguements
- * @printed: the printed characters
- * Return: printed charcaters
+ * get_width - Calculates the width for printing
+ * @format: Formatted string in which to print the arguments.
+ * @i: List of arguments to be printed.
+ * @list: list of arguments.
+ *
+ * Return: width.
  */
-
-int printf_reverse(va_list args, int printed)
+int get_width(const char *format, int *i, va_list list)
 {
-	char *str = va_arg(args, char *);
-	int len = 0, i;
+	int curr_i;
+	int width = 0;
 
-	while (str[len])
+	for (curr_i = *i + 1; format[curr_i] != '\0'; curr_i++)
 	{
-		len++;
+		if (is_digit(format[curr_i]))
+		{
+			width *= 10;
+			width += format[curr_i] - '0';
+		}
+		else if (format[curr_i] == '*')
+		{
+			curr_i++;
+			width = va_arg(list, int);
+			break;
+		}
+		else
+			break;
 	}
 
-	for (i = len - 1; i >= 0; i--)
-	{
-		_putchar(str[i]);
-		printed++;
-	}
+	*i = curr_i - 1;
 
-	return (printed);
+	return (width);
 }

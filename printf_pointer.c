@@ -1,50 +1,26 @@
 #include "main.h"
 
-#define MAX_HEX_DIGITS 16
-
 /**
- * printf_pointer - prints a binary number
- * @args: numberof arguements
- * @printed: the printed characters
- * Return: printed charcaters
+ * get_size - Calculates the size to cast the argument
+ * @format: Formatted string in which to print the arguments
+ * @i: List of arguments to be printed.
+ *
+ * Return: Precision.
  */
-
-int printf_pointer(va_list args, int printed)
+int get_size(const char *format, int *i)
 {
-	void *ptr = va_arg(args, void*);
-	unsigned long num = (unsigned long) ptr;
-	int digits = 0;
-	int i;
-	unsigned long temp = num;
-	char hex_digits[MAX_HEX_DIGITS] = "0123456789abcdef";
-	char hex[MAX_HEX_DIGITS];
+	int curr_i = *i + 1;
+	int size = 0;
 
-	while (temp != 0)
-	{
-		digits++;
-		temp /= 16;
-	}
+	if (format[curr_i] == 'l')
+		size = S_LONG;
+	else if (format[curr_i] == 'h')
+		size = S_SHORT;
 
-	printed += _putchar('0');
-	printed += _putchar('x');
-
-	if (num == 0)
-	{
-		printed += _putchar('0');
-	}
+	if (size == 0)
+		*i = curr_i - 1;
 	else
-	{
-		for (i = digits - 1; i >= 0; i--)
-		{
-			int digit = num % 16;
+		*i = curr_i;
 
-			hex[i] = hex_digits[digit];
-			num /= 16;
-		}
-		for (i = 0; i < digits; i++)
-		{
-			printed += _putchar(hex[i]);
-		}
-	}
-	return (printed);
+	return (size);
 }

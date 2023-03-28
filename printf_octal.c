@@ -1,37 +1,39 @@
-#include "main.h"
-
+#include"main.h"
 /**
- * printf_octal - prints a binary number
- * @num: number of arguements
- * @printed: the printed characters
- * Return: printed charcaters
+ * get_precision - calculates printing precision
+ * @format: formatted string
+ * @i: list of arguments to be printed
+ * @list: list of arguments
+ * Return: precision
  */
-
-int printf_octal(unsigned int num, int printed)
+int get_precision(const char *format, int *i, va_list list)
 {
-	int oct[100], i = 0, j;
+	int curr_i = *i + 1;
+	int precision = -1;
 
-	while (num != 0)
-	{
-		int remainder = num % 8;
+	if (format[curr_i] != '.')
+		return (precision);
 
-		oct[i] = 48 + remainder;
-		i++;
-		num /= 8;
-	}
+	precision = 0;
 
-	if (i == 0)
+	for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
 	{
-		_putchar('0');
-		printed++;
-	}
-	else
-	{
-		for (j = i - 1; j >= 0; j--)
+		if (is_digit(format[curr_i]))
 		{
-			_putchar(oct[j]);
-			printed++;
+			precision *= 10;
+			precision += format[curr_i] - '0';
 		}
+		else if (format[curr_i] == '*')
+		{
+			curr_i++;
+			precision = va_arg(list, int);
+			break;
+		}
+		else
+			break;
 	}
-	return (printed);
+
+	*i = curr_i - 1;
+
+	return (precision);
 }
